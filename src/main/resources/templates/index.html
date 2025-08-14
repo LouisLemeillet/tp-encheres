@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-encheres( 
+					titrePage=~{:: title},
+					contenuPage=~{:: main},
+					ressourcesSupp=~{},
+					scripts=~{})}">
+
+<head>
+
+<title data-th-text="#{index.title}"></title>
+</head>
+<body>
+	<main class="center-main">
+		<section class="center-section">
+			<h1 style="text-align: center;" data-th-text="#{index.h1}"></h1>
+			
+		</section>
+		<div th:each="articleAVendre : ${listeArticleAVendre}">
+			<div th:replace="~{fragments/fragment-article :: articleCard(${articleAVendre})}"></div>
+		</div>
+		
+		<form th:action="@{/index}" method="get">
+		    <select name="categorieId">
+		        <option value="">Toutes les catégories</option>
+		        <th:block th:each="categorie : ${categorieEnSession}">
+		            <option th:value="${categorie.id}" th:text="${categorie.libelle}"></option>
+		        </th:block>
+		    </select>
+		    <button type="submit">Filtrer</button>
+		</form>
+		
+		<div th:each="articleAVendre : ${listeArticleAVendre}">
+		    <p th:text="${article.nom}"></p>
+		</div>
+	</main>
+</body>
+</html>

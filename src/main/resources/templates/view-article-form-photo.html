@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	 th:replace="~{layouts/layout :: layout-encheres( 
+						titrePage=~{:: title},
+						contenuPage=~{:: main},
+						ressourcesSupp=~{:: #ressources-css},
+						scripts=~{})}">
+<head>
+	<!-- Créer comme titre de page -->
+	<title data-th-text="#{view-article-form-title}"></title>
+	<!-- Ajout de CSS tp-form.css -->
+	<th:block id="ressources-css">
+		<link rel="stylesheet" data-th-href="@{/css/tp-form.css}">
+		<link rel="stylesheet" data-th-href="@{/css/tp-error.css}">
+	</th:block>
+</head>
+
+<body>
+	<main class="center-main">
+		<h1 th:text="#{view-article-form-photo.h1}"></h1>
+		<p th:text="#{view-article-form-photo.p}"></p>
+		<button type=button>Uploader</button>
+	
+	</main>
+</body>

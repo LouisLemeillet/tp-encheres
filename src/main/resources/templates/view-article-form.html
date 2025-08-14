@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	 th:replace="~{layouts/layout :: layout-encheres( 
+						titrePage=~{:: title},
+						contenuPage=~{:: main},
+						ressourcesSupp=~{:: #ressources-css},
+						scripts=~{})}">
+<head>
+	<!-- Créer comme titre de page -->
+	<title data-th-text="#{view-article-form-title}"></title>
+	<!-- Ajout de CSS tp-form.css -->
+	<th:block id="ressources-css">
+		<link rel="stylesheet" data-th-href="@{/css/tp-form.css}">
+		<link rel="stylesheet" data-th-href="@{/css/tp-error.css}">
+	</th:block>
+</head>
+
+<body>
+<main>
+<form th:object="${article}" th:action="@{/vendre}" method="post" >
+	<th:block th:if="${!#strings.isEmpty(action)}">
+		<div th:replace="~{fragments/errors/fragment-errors :: frag-errors}"></div>
+	</th:block>
+	<ul class="flex-outer">
+		<li>
+			<label for="inputNomArticle" th:text="#{view-article-form.nom}"></label> 
+			<input type="text" id="inputNomArticle" th:field="*{nom}" required />
+			<th:block th:if="${!#strings.isEmpty(action)}">
+				<div th:replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div>
+			</th:block>
+					
+		</li>
+		
+		<li>
+			<label for="inputCategorie" th:text="#{view-article-form.categorie}"></label> 
+			<select id="inputCategorie" th:field="*{categorie}" required>
+				<option th:each="categorie : ${categorieEnSession}" th:text="${categorie.libelle}" th:value="${categorie.id}"></option>
+			</select>
+
+			<div th:replace="~{fragments/errors/fragment-error :: frag-error('categorie')}"></div>
+			
+		</li>
+		
+		<li>
+			<label for="inputDescription" th:text="#{view-article-form.description}"> </label> 
+			<textarea id="inputDescription" th:field="*{description}" required></textarea>
+			<th:block th:if="${!#strings.isEmpty(action)}">
+				<div th:replace="~{fragments/errors/fragment-error :: frag-error('description')}"></div>
+			</th:block>
+		</li>
+		
+		<li>
+			<label for="inputPrix" th:text="#{view-article-form.prix}"> </label> 
+			<input type="number" id="inputPrix" th:field="*{prixInitial}"  required />
+			<th:block th:if="${!#strings.isEmpty(action)}">
+				<div th:replace="~{fragments/errors/fragment-error :: frag-error('prixInitial')}"></div>
+			</th:block>
+		</li>
+		
+		<li>
+			<label for="inputDateDebutEncheres" th:text="#{view-article-form.debutEncheres}"></label> 
+			<input type="date" id="inputDateDebutEncheres" th:field="*{dateDebutEncheres}" required/>
+			<th:block th:if="${!#strings.isEmpty(action)}">
+				<div th:replace="~{fragments/errors/fragment-error :: frag-error('dateDebutEncheres')}"></div>
+			</th:block>
+		</li>
+		
+		<li>
+			<label for="inputDateFinEncheres" th:text="#{view-article-form.finEncheres}"></label> 
+			<input type="date" id="inputDateFinEncheres" th:field="*{dateFinEncheres}" required/>
+			<th:block th:if="${!#strings.isEmpty(action)}">
+				<div th:replace="~{fragments/errors/fragment-error :: frag-error('dateFinEncheres')}"></div>
+			</th:block>
+		</li>
+		
+		<li>
+			<label for="inputRetrait" th:text="#{view-article-form.retrait}"></label> 
+			<select id="inputRetrait" th:field="*{retrait}" required>
+				<option th:each="retrait : ${retraitEnSession}" th:text="|${retrait.rue} ${retrait.codePostal} ${retrait.ville}|" th:value="${retrait.id}"></option>
+			</select>
+
+			<div th:replace="~{fragments/errors/fragment-error :: frag-error('retrait')}"></div>
+			
+		</li>	
+		
+		<li>
+			<button type="submit" th:text="#{view-article-form.confirmer}"></button>
+		</li>
+	</ul>
+</form>
+<div>
+		<form th:action="@{/}" method="get">
+			<button type="submit" th:text="#{view-article-form.annulerVente}"></button>
+		</form>
+			<button type="button" onclick="history.back()" th:text="#{view-article-form.annuler}"></button>
+		
+	</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		data-th-replace="~{layouts/layout :: layout-encheres( 
+						titrePage=~{:: title},
+						contenuPage=~{:: main},
+						ressourcesSupp=~{:: #ressources-css},
+						scripts=~{})}">
+<head>
+	<!-- Créer comme titre de page -->
+	<title data-th-text="#{view-profil-form-modifier.title}"></title>
+	<!-- Ajout de CSS tp-form.css -->
+	<th:block id="ressources-css">
+		<link rel="stylesheet" data-th-href="@{/css/tp-form.css}">
+		<link rel="stylesheet" data-th-href="@{/css/tp-error.css}">
+	</th:block>
+</head>
+<body>
+	<main>
+		<form data-th-action="@{${action}}" method="post" data-th-object="${profil}">
+			<h1 data-th-text="${titreForm}"></h1>
+			<th:block data-th-if="${!#strings.isEmpty(action)}">
+				<div data-th-replace="~{fragments/errors/fragment-errors :: frag-errors}"></div>
+			</th:block>
+			<ul class="flex-outer">
+				<li>
+					<label for="inputPseudo" data-th-text="#{frag-profil-form.pseudo}"></label> 
+					<input type="text" id="inputPseudo" data-th-field="*{pseudo}" readonly required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('pseudo')}"></div>
+					</th:block>
+					
+				</li>
+				<li>
+					<label for="inputNom" data-th-text="#{frag-profil-form.nom}"></label> 
+					<input type="text" id="inputNom" 
+						data-th-field="*{nom}" required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div>
+					</th:block>
+				</li>
+				<li>
+					<label for="inputPrenom" data-th-text="#{frag-profil-form.prenom}"> </label> 
+					<input type="text" id="inputPrenom" 
+							data-th-field="*{prenom}" required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('prenom')}"></div>
+					</th:block>
+				</li>
+				<li>
+					<label for="inputEmail" data-th-text="#{frag-profil-form.email}"> </label> 
+					<input type="text" id="inputEmail" 
+							data-th-field="*{email}"  required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('email')}"></div>
+					</th:block>
+				</li>
+				
+				<li>
+					<label for="inputTelephone" data-th-text="#{frag-profil-form.telephone}"></label> 
+					<input type="text" id="inputTelephone" 
+						data-th-field="*{telephone}" pattern="(?:\+33|0)[1-9](?:\d{2}){4}" />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('telephone')}"></div>
+					</th:block>
+				</li>
+				
+				<li>
+					<label for="inputAdresse" data-th-text="#{frag-profil-form.adresse}"></label> 
+					<input type="text" id="inputAdresse" 
+						data-th-field="*{adresse.rue}" required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.rue')}"></div>
+					</th:block>
+				</li>
+				
+				<li>
+					<label for="inputVille" data-th-text="#{frag-profil-form.ville}"></label> 
+					<input type="text" id="inputVille" 
+						data-th-field="*{adresse.ville}" required />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.ville')}"></div>
+					</th:block>
+				</li>
+				
+				<li>
+					<label for="inputCodePostal" data-th-text="#{frag-profil-form.codepostal}"></label> 
+					<input type="text" id="inputCodePostal" 
+						data-th-field="*{adresse.codePostal}" />
+					<th:block data-th-if="${!#strings.isEmpty(action)}">
+						<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.codePostal')}"></div>
+					</th:block>
+				</li>
+				
+				<li>
+					<button type="submit" data-th-text="#{frag-profil-form.enregistrer}"></button>
+				</li>
+			</ul>
+		</form>
+	</main>
+
+</body>
+</html>

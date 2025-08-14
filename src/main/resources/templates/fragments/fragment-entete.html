@@ -1,0 +1,49 @@
+<header xmlns:th="http://www.thymeleaf.org" data-th-fragment="frag-entete">
+	<h1 id="nav-title">
+		<a href="/"></a>
+		
+	</h1>
+	<!-- <div>
+		<a href="/?language=fr"><img alt="Francais" src="/images/French.webp" style="width:50px; height:30px;"></a>
+		<a href="/?language=en"><img alt="Anglais" src="/images/English.webp" style="width:50px; height:30px;"></a>
+	</div>  -->
+	<nav>
+		<ul>
+			
+			<li><a href="/" data-th-text="#{frag-entete.a.accueil}"></a></li>
+			
+			<li data-th-if="${!#authorization.expression('isAuthenticated()')}">
+				<a href="/login" data-th-text="#{frag-entete.a.connexion}"></a>
+			</li>
+			
+			<!-- Le lien n'est visible que si un membre est présent -->
+			<!-- ET que le membre est un administrateur -->
+			
+				<li data-th-if="${#authorization.expression('hasRole(''ADMIN'')')}">
+					<a href="/encheres/admin" data-th-text="#{frag-entete.a.encheres.admin}"></a>
+				</li>
+				
+			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
+				<a th:href="@{/vendre}" data-th-text="#{frag-entete.a.vendre}"></a>
+			</li>
+				
+			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
+				<a data-th-href="@{/profil}" data-th-text="#{frag-entete.a.profil}"></a>
+			</li>
+			
+
+			<li data-th-if="${#authorization.expression('isAuthenticated()')}">
+				<form th:action="@{/logout}" method="post" style="display:inline">
+					<button type="submit" data-th-text="#{frag-entete.a.deconnexion}"></button>
+				</form>
+			</li>
+			
+		</ul>
+	</nav>
+	
+	<div class="accueilCard">
+		<span data-th-text="'Date du jour : ' + ${dateDuJour}">04/08/2025</span>
+		<span data-th-if="${utilisateurEnSession != null}" data-th-text="${utilisateurEnSession.pseudo}"></span>
+	</div>
+	
+</header>

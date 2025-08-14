@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		data-th-replace="~{layouts/layout :: layout-encheres( 
+						titrePage=~{:: title},
+						contenuPage=~{:: main},
+						ressourcesSupp=~{},
+						scripts=~{})}">
+						
+						
+<head>
+
+<title data-th-text="#{profil.title}"></title>
+</head>
+<body>
+	<main class="center-main">
+		<section class="center-section">
+			<h1 style="text-align: center;" data-th-text="${profil.pseudo}"></h1>
+			<p style="text-align: center;" data-th-text="'Prénom : ' + ${profil.prenom}"></p>
+			<p style="text-align: center;" data-th-text="'Nom : ' + ${profil.nom}"></p>
+			<p style="text-align: center;" data-th-text="'Email : ' + ${profil.email}"></p>
+			<p style="text-align: center;" data-th-text="'Telephone : ' + ${profil.telephone}"></p>
+			<th:block th:if="${consulter==false}">
+			<p style="text-align: center;" data-th-text="'Crédit : ' + ${profil.credit}"></p>
+			<form data-th-action="@{/profil/modifier}">
+				<button>Modifier</button>
+			</form>
+			</th:block>
+		</section>
+		
+		
+		
+	</main>
+</body>
+</html>
