@@ -61,31 +61,12 @@ public class ArticleController {
 
 	@GetMapping("/index")
 	public String afficherAccueil(@RequestParam(name = "categorieId", required = false) Long categorieId,
-								  @RequestParam(name="ventesUtilisateur", required=false) Integer statutEnchere,
+								  @RequestParam(name="ventesUtilisateur", required=false, defaultValue="1") Integer statutEnchere,
 								  @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 	                              Model model) {
-		List<ArticleAVendre> listeArticleAVendre = articleService.findAll();
 		
+		List<ArticleAVendre> listeArticleAVendre = articleService.findByCritere(categorieId, statutEnchere, utilisateurEnSession);
 		
-		if (categorieId != null && statutEnchere != null && statutEnchere == 1) {
-			listeArticleAVendre = listeArticleAVendre.stream()
-					.filter(article -> article.getStatut() == statutEnchere.intValue())
-	                .filter(article -> Long.valueOf(article.getCategorie().getId()).equals(categorieId))
-	                .collect(Collectors.toList());
-	    }
-		
-		if(utilisateurEnSession != null) {
-			
-			if(statutEnchere != null && (statutEnchere == 1 || statutEnchere == 2)) {
-				listeArticleAVendre.addAll(articleService.findAllVendus());
-				listeArticleAVendre = listeArticleAVendre.stream()
-						.filter(article -> article.getStatut() == statutEnchere.intValue())
-						.filter(article -> article.getVendeur().getPseudo().equals(utilisateurEnSession.getPseudo()))
-						.collect(Collectors.toList());
-			} 
-	
-
-		}
 			
 		model.addAttribute("listeArticleAVendre", listeArticleAVendre);
 	    model.addAttribute("categorieEnSession", articleService.findAllCategorie());

@@ -27,5 +27,7 @@ public interface ArticleService {
 
 	List<ArticleAVendre> findAllVendus();
 
+	List<ArticleAVendre> findByCritere(Long categorieId, Integer statutEnchere, Utilisateur utilisateur);
+
 
 }

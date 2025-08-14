@@ -2,6 +2,7 @@ package fr.eni.tp.encheres.bll;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,33 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleAVendre> findAll() {
 		return articleAVendreDAO.findAll();
+	}
+	
+	@Override
+	public List<ArticleAVendre> findByCritere(Long categorieId, Integer statutEnchere, Utilisateur utilisateur){
+		List<ArticleAVendre> listeArticleAVendre = findAll();
+		
+		
+		if (categorieId != null) {
+			listeArticleAVendre = listeArticleAVendre.stream()
+					.filter(article -> article.getStatut() == statutEnchere.intValue())
+	                .filter(article -> Long.valueOf(article.getCategorie().getId()).equals(categorieId))
+	                .collect(Collectors.toList());
+	    }
+		
+		if(utilisateur != null && utilisateur.getPseudo() != null) {
+			
+			if(statutEnchere != null && (statutEnchere == 1 || statutEnchere == 2)) {
+				listeArticleAVendre.addAll(findAllVendus());
+				listeArticleAVendre = listeArticleAVendre.stream()
+						.filter(article -> article.getStatut() == statutEnchere.intValue())
+						.filter(article -> article.getVendeur().getPseudo().equals(utilisateur.getPseudo()))
+						.collect(Collectors.toList());
+			} 
+	
+
+		}
+		return listeArticleAVendre;
 	}
 	
 	@Override
