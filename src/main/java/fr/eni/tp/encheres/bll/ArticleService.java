@@ -25,4 +25,7 @@ public interface ArticleService {
 
 	Categorie findCategorieById(long noCategorie);
 
+	List<ArticleAVendre> findAllVendus();
+
+
 }

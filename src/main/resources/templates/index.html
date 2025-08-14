@@ -23,13 +23,30 @@
 		
 		<form th:action="@{/index}" method="get">
 		    <select name="categorieId">
-		        <option value="">Toutes les catégories</option>
+		        <option value="" th:selected="${categorieIdSelectionnee == null}">Toutes les catégories</option>
 		        <th:block th:each="categorie : ${categorieEnSession}">
-		            <option th:value="${categorie.id}" th:text="${categorie.libelle}"></option>
+		            <option th:value="${categorie.id}" th:text="${categorie.libelle}" th:selected="${categorie.id == categorieIdSelectionnee}"></option>
 		        </th:block>
 		    </select>
 		    <button type="submit">Filtrer</button>
 		</form>
+		
+		<form th:action="@{/index}" method="post">
+			<label for="articleNom"></label>
+		    <input type="text" name="articleNom" id="articleNom">
+		    <button type="submit">Filtrer</button>
+		</form>
+		
+		<th:block data-th-if="${#authorization.expression('isAuthenticated()')}">
+			<form th:action="@{/index}" method="get">
+				<p>Mes ventes</p>
+				<select name="ventesUtilisateur">
+					<option value="1">Mes ventes en cours</option>
+					<option value="2">Mes ventes terminées</option>
+				</select>
+				<button type="submit">Filtrer</button>
+			</form>
+		</th:block>
 		
 		<div th:each="articleAVendre : ${listeArticleAVendre}">
 		    <p th:text="${article.nom}"></p>

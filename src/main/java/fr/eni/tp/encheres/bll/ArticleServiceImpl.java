@@ -13,6 +13,7 @@ import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.AdresseDAO;
 import fr.eni.tp.encheres.dal.ArticleAVendreDAO;
 import fr.eni.tp.encheres.dal.CategorieDAO;
+import fr.eni.tp.encheres.dal.UtilisateurDAO;
 import fr.eni.tp.encheres.exceptions.BusinessCode;
 import fr.eni.tp.encheres.exceptions.BusinessException;
 
@@ -22,6 +23,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private ArticleAVendreDAO articleAVendreDAO;
 	private CategorieDAO categorieDAO;
 	private AdresseDAO adresseDAO;
+	private UtilisateurDAO utilisateurDAO;
 	
 	
 
@@ -51,6 +53,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	@Override
+	public List<ArticleAVendre> findAllVendus() {
+		return articleAVendreDAO.findAllVendus();
+	}
+	
+	@Override
 	public List<Categorie> findAllCategorie(){
 		return categorieDAO.findAll();
 	}
@@ -69,6 +76,8 @@ public class ArticleServiceImpl implements ArticleService {
 	public Categorie findCategorieById(long noCategorie) {
 		return categorieDAO.findCategorieById(noCategorie);
 	}
+	
+	
 	
 	@Override
 	@Transactional

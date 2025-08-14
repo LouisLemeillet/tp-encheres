@@ -30,6 +30,9 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	
 	private static final String FIND_ALL_ACTIVE = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait FROM ARTICLES_A_VENDRE"
 			+ " WHERE statut_enchere = 1";
+	
+	private static final String FIND_ALL_VENDUS = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, statut_enchere, prix_initial, prix_vente, id_utilisateur, no_categorie, no_adresse_retrait FROM ARTICLES_A_VENDRE"
+			+ " WHERE statut_enchere = 2";
 
 	@Override
 	public void create(ArticleAVendre articleAVendre, String pseudo) {
@@ -72,6 +75,11 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	@Override
 	public List<ArticleAVendre> findAll(){
 		return jdbcTemplate.query(FIND_ALL_ACTIVE, new ArticleRowMapper());
+	}
+	
+	@Override
+	public List<ArticleAVendre> findAllVendus(){
+		return jdbcTemplate.query(FIND_ALL_VENDUS, new ArticleRowMapper());
 	}
 	
 	@Override

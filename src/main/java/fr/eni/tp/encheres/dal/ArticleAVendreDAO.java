@@ -14,4 +14,6 @@ public interface ArticleAVendreDAO {
 
 	void create(ArticleAVendre article);
 
+	List<ArticleAVendre> findAllVendus();
+
 }

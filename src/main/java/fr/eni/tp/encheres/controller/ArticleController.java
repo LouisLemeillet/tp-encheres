@@ -1,5 +1,6 @@
 package fr.eni.tp.encheres.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -53,23 +53,59 @@ public class ArticleController {
 		long noAdresseUtilisateur = utilisateurEnSession.getAdresse().getId();
 		return articleService.findAllRetrait(noAdresseUtilisateur);
 	}
-
-
+	
+	@GetMapping("/")
+	public String redirectionAccueil() {
+	    return "redirect:/index";
+	}
 
 	@GetMapping("/index")
 	public String afficherAccueil(@RequestParam(name = "categorieId", required = false) Long categorieId,
+								  @RequestParam(name="ventesUtilisateur", required=false) Integer statutEnchere,
+								  @ModelAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession,
 	                              Model model) {
 		List<ArticleAVendre> listeArticleAVendre = articleService.findAll();
 		
-		if (categorieId != null) {
+		
+		if (categorieId != null && statutEnchere != null && statutEnchere == 1) {
 			listeArticleAVendre = listeArticleAVendre.stream()
+					.filter(article -> article.getStatut() == statutEnchere.intValue())
 	                .filter(article -> Long.valueOf(article.getCategorie().getId()).equals(categorieId))
 	                .collect(Collectors.toList());
 	    }
+		
+		if(utilisateurEnSession != null) {
+			
+			if(statutEnchere != null && (statutEnchere == 1 || statutEnchere == 2)) {
+				listeArticleAVendre.addAll(articleService.findAllVendus());
+				listeArticleAVendre = listeArticleAVendre.stream()
+						.filter(article -> article.getStatut() == statutEnchere.intValue())
+						.filter(article -> article.getVendeur().getPseudo().equals(utilisateurEnSession.getPseudo()))
+						.collect(Collectors.toList());
+			} 
+	
 
+		}
+			
 		model.addAttribute("listeArticleAVendre", listeArticleAVendre);
 	    model.addAttribute("categorieEnSession", articleService.findAllCategorie());
+	    model.addAttribute("categorieIdSelectionnee", categorieId);
 	    return "index";
+	}
+	
+	@PostMapping("/index")
+	public String afficherAccueilPostFiltre(@RequestParam(name="articleNom", required=false) String articleNom, Model model) {
+		List<ArticleAVendre> listeArticleAVendre = articleService.findAll();
+		
+		if(articleNom != null) {
+			listeArticleAVendre = listeArticleAVendre.stream()
+					.filter(article -> article.getNom().toLowerCase().contains(articleNom))
+					.collect(Collectors.toList());
+		}
+		
+		model.addAttribute("listeArticleAVendre", listeArticleAVendre);
+		model.addAttribute("categorieEnSession", articleService.findAllCategorie());
+		return "index";
 	}
 	
 	@GetMapping("/vendre")
@@ -90,17 +126,6 @@ public class ArticleController {
 		}
 	} 
 	
-	@GetMapping("/test")
-	public String showTest() {
-		return "test";
-	}
-	
-	@PostMapping("/test")
-	@ResponseBody
-	public String testPost(@RequestParam String foo) {
-	    System.out.println("POST reçu avec foo = " + foo);
-	    return "ok";
-	}
 	
 	@PostMapping("/vendre")
 	public String creerArticleSansPhoto(@Valid @ModelAttribute("article") ArticleAVendre articleAVendre, BindingResult bindingResult, @SessionAttribute("utilisateurEnSession") Utilisateur utilisateurEnSession) {

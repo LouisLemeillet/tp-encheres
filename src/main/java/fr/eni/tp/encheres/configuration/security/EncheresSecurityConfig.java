@@ -38,6 +38,7 @@ public class EncheresSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	http.authorizeHttpRequests(auth -> auth
 			.requestMatchers("/", "/css/**", "/images/**", "/js/**").permitAll()
+			.requestMatchers("/index").permitAll()
 			.requestMatchers(HttpMethod.GET, "/profil/creer").permitAll()
 			.requestMatchers(HttpMethod.POST, "/profil/creer").permitAll()
 			.requestMatchers("/profil").authenticated()
